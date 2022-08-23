@@ -19,4 +19,33 @@ Packages: For the classifyre package, a zip file has been included in the LIMA A
 
 # Contents
 
+The repository contains two main folders. 
+
+## [LIMA App](https://github.com/ZainabHaybe/Lipid-Mediator-Analyst/tree/main/LIMA%20App)
+
+This folder contains the r script, classifyre package, and the coefficients folder required to run the LIMA App. 
+
+**LIMA_App.R** script: is the r script that once opened on R Studio, the user can click "Run APP" to open and run the application. The script begins with the install packages and load packages for all the packages required for this script. Then it contains the user interface with the scripts for each page. Finally, is the server with the functions that does the processing for each function. 
+
+## [coefficients](https://github.com/ZainabHaybe/Lipid-Mediator-Analyst/tree/main/LIMA%20App/coefficients)
+
+Contains all the files with the additional information needed to process the data and run the application.
+
+**MS2_CrossCoef.csv, MS3_CrossCoef.csv, MS4_CrossCoef.csv**: It is the cross reference coeffieinces which is the signal of the internal standards when the method was validated for the 3 mass spectometry instruments. 
+
+**MS2_ConvCoef.csv, MS3_ConvCoef.csv, MS4_CrossCoef.csv**: It is the standard curve values for the mediators used to convert the area into amount in picograms for each of the 3 mass spectometry instruments. 
+
+**Met_IntStd.csv**: The file containing the internal standards for each of the lipid mediators.
+
+**Pathways2.csv**: The file containing the pathways for each internal standard.
+
+**Rename_Comp.csv**: The correct naming information for some of the mediators during the data processing step.
+
+**Rename_Met2.csv**: The file that standardizes the names of the mediators. 
+
+**SPM_FA.csv**: The Fatty acid family for each of the mediator.
+
+
+
+
 
