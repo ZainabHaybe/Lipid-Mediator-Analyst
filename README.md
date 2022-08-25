@@ -19,7 +19,11 @@ Packages: For the classifyre package, a zip file has been included in the LIMA A
 
 # Contents
 
-The repository contains two main folders. 
+The repository contains two main folders: Documentation and LIMA_App
+
+## [Documentation](https://github.com/ZainabHaybe/Lipid-Mediator-Analyst/tree/main/Documentation)
+
+This folder contains a PDF file with the documentation for LIMA App. The documentation includes how to use the application and the methodology/background information. 
 
 ## [LIMA App](https://github.com/ZainabHaybe/Lipid-Mediator-Analyst/tree/main/LIMA%20App)
 
@@ -27,11 +31,11 @@ This folder contains the r script, classifyre package, and the coefficients fold
 
 **LIMA_App.R** script: is the r script that once opened on R Studio, the user can click "Run APP" to open and run the application. The script begins with the install packages and load packages for all the packages required for this script. Then it contains the user interface with the scripts for each page. Finally, is the server with the functions that does the processing for each function. 
 
-## classyfire_0.1-2.tar.gz
+### classyfire_0.1-2.tar.gz
 
 The zip file contianing the requirements needed to install and load the Classyfire package that is used to run the Support Vector Machine on R.
 
-## [coefficients](https://github.com/ZainabHaybe/Lipid-Mediator-Analyst/tree/main/LIMA%20App/coefficients)
+### [coefficients](https://github.com/ZainabHaybe/Lipid-Mediator-Analyst/tree/main/LIMA%20App/coefficients)
 
 Contains all the files with the additional information needed to process the data and run the application.
 
