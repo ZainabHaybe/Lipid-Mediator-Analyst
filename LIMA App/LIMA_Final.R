@@ -100,11 +100,14 @@ ui <- navbarPage(title = "LIMA",
                                                choices = c(Comma = ",",
                                                            Tab = "\t"),
                                                selected = ","),
+                                  
+                                  #example MS file to download
+                                  downloadButton("DownloadDataProc_Example", "Download Example Input File"),
                                   #line separator
                                   tags$hr(),
                                   
                                   #option for user to use their own coefficients 
-                                  checkboxInput("Coef_Upload", "Do you want to use your own coefficeints?", FALSE),
+                                  checkboxInput("Coef_Upload", "Do you want to use your own coefficients?", FALSE),
                                   
                                   #conditional panel that appears if user wants to use set coefficients (Checkbox input = FALSE)
                                   conditionalPanel(
@@ -175,7 +178,7 @@ ui <- navbarPage(title = "LIMA",
                                   ),
                                   
                                   #select excess columns that are not sampels 
-                                  selectInput('not_Samples', 'Select all that are not samples', "", multiple=TRUE, selectize=TRUE),
+                                  selectInput('not_Samples', 'Select all that are not samples or 100%', "", multiple=TRUE, selectize=TRUE),
                                   
                                   #Input - Max cokumn name name 
                                   selectInput('MaxCol_Name', 'Select Name of 100% Sample', ""),
@@ -191,9 +194,9 @@ ui <- navbarPage(title = "LIMA",
                                   conditionalPanel(
                                     condition = "input.SameVol_Data == true",
                                     #input volume of samples 
-                                    numericInput("SameData_Amount", "Select the volume/weight of your sample", 1, min = 0, max = NA),
+                                    numericInput("SameData_Amount", "Select the  original (before MEOH+IS) volume (ml)/weight(mg) of your sample", 1, min = 0, max = NA),
                                     
-                                    numericInput("SameData_Standard", "Select the volume/weight you want to standardize the measurement to.", 1, min = 0, max = NA),
+                                    numericInput("SameData_Standard", "Select the volume(ml)/weight(mg) you want to standardize the measurement to.", 1, min = 0, max = NA),
                                     ),
                                   
                                   checkboxInput("DiffVol_Data", "Are your samples different volume/Weight?", FALSE),
@@ -201,7 +204,7 @@ ui <- navbarPage(title = "LIMA",
                                     condition = "input.DiffVol_Data == true",
                                     #download sample list file
                                     downloadButton("DownloadSampleList", "Download Sample List"),
-                                    fileInput("DiffVol_File", "Choose Samples Volume/Mass File",
+                                    fileInput("DiffVol_File", "Choose Samples Volume(ml)/Mass(mg) File",
                                               multiple = FALSE,
                                               #accept is list of file types that are acceptable
                                               accept = c("text/csv", 
@@ -234,7 +237,7 @@ ui <- navbarPage(title = "LIMA",
                                   width = 9,
                                   height = 12,
                                   tabsetPanel(type="tabs",
-                                              tabPanel("Final Table", 
+                                              tabPanel("Final Table (pg/ml)", 
                                                        #Error Message text output
                                                        htmlOutput("ConcTable_Error"),
                                                        #styling text output to be red and bigger
@@ -269,7 +272,7 @@ ui <- navbarPage(title = "LIMA",
                                                        #styling text output to be red and bigger
                                                        tags$head(tags$style("#PerRecovery_Error{color: red; font-size: 20px; font-style: italic;}")),
                                                        dataTableOutput("PerRecovery"),
-                                                       downloadButton("DownloadPerRecoveryTable", "Download Table")),
+                                                       downloadButton("DownloadPerRecovery", "Download Table")),
                                               tabPanel("Normalized Amount", 
                                                        #Error Message text output
                                                        htmlOutput("NormTable_Error"),
@@ -278,10 +281,10 @@ ui <- navbarPage(title = "LIMA",
                                                        dataTableOutput("NormTable"),
                                                        downloadButton("DownloadNormTable", "Download Table")),
                                               tabPanel("Coefficients Info", 
-                                                       textOutput("Cross Reference Coefficients"),
+                                                       uiOutput("CrossCoefTitle"),
                                                        dataTableOutput("CrossRefCoef_Table"),
                                                        tags$hr(),
-                                                       textOutput("Conversion Coefficients"),
+                                                       uiOutput("StandCurveTitle"),
                                                        dataTableOutput("ConvCoef_Table")))
                                   ))),
                             
@@ -319,6 +322,9 @@ ui <- navbarPage(title = "LIMA",
                                                choices = c(Comma = ",",
                                                            Tab = "\t"),
                                                selected = ","),
+                                  
+                                  #example file to download
+                                  downloadButton("DownloadDataFormat_Example", "Download Example Input File"),
                                   
                                   #line separator
                                   tags$hr(),
@@ -379,6 +385,9 @@ ui <- navbarPage(title = "LIMA",
                                                     choices = c(Comma = ",",
                                                                 Tab = "\t")),
                                        
+                                       #example MS file to download
+                                       downloadButton("DownloadPCAPLSDA_Example", "Download Example Input File"),
+                                       
                                        #input---Location of samples 
                                        radioButtons("samp_PCA", "Sample location",
                                                     choices = c(Row = "row_PCA", 
@@ -424,10 +433,10 @@ ui <- navbarPage(title = "LIMA",
                                                             #Check box to show samples 
                                                             checkboxInput("ViewSamples_PCA", "View Samples", TRUE),
                                                             #checkbox to select condidence interval
-                                                            numericInput("PCA_Confidence", "Select The condience Interval ", 0.95, min = 0, max = 1),
+                                                            numericInput("PCA_Confidence", "Select The confidence Interval ", 0.95, min = 0, max = 1),
                                                             #Update information 
                                                             actionButton("Go_PCAPLSDA2", "Update Plot"),
-                                                            downloadButton("DownloadScore", "Download X-scores Data"),
+                                                            downloadButton("DownloadScore", "Download components values"),
                                                             tags$hr(),
                                                             uiOutput("R2Q2_Title"),
                                                             dataTableOutput("R2Q2_Table"),
@@ -486,6 +495,9 @@ ui <- navbarPage(title = "LIMA",
                                                     choices = c(Comma = ",",
                                                                 Tab = "\t")),
                                        
+                                       #example MS file to download
+                                       downloadButton("DownloadDiff_Example", "Download Example Input File"),
+                                       
                                        #input---Location of samples 
                                        radioButtons("samp_Diff", "Sample location",
                                                     choices = c(Row = "row_Diff", 
@@ -507,8 +519,8 @@ ui <- navbarPage(title = "LIMA",
                                        tags$hr(),
                                        
                                        # Group selection ----
-                                       selectInput("group_A", "Group A",""),
-                                       selectInput("group_B", "Group B",""),
+                                       selectInput("group_A", "Cases",""),
+                                       selectInput("group_B", "Control Group",""),
                                        
                                        
                                        #calculate button 
@@ -579,11 +591,15 @@ ui <- navbarPage(title = "LIMA",
                                            radioButtons("sep_Corr", "Separator",
                                                         choices = c(Comma = ",",
                                                                     Tab = "\t")),
+                                           
                                            #input---Location of samples
                                            radioButtons("samp_Corr", "Sample location",
                                                         choices = c(Row = "row_Corr",
                                                                     Column = "col_Corr"),
                                                         selected = "row_Corr"),
+                                           
+                                           #example Corr file to download
+                                           downloadButton("DownloadCorr_Example", "Download Example Input File"),
                                            
                                            #line separator 
                                            tags$hr(),
@@ -739,6 +755,9 @@ ui <- navbarPage(title = "LIMA",
                                        #input -- where the sample group info column is
                                        selectInput("Group_ML", "Select Group Column Name", "Please upload file"),
                                        
+                                       #example MS file to download
+                                       downloadButton("DownloadML_Example", "Download Example Input File"),
+                                       
                                        # Help text ----
                                        helpText(style="text-align: justify;", paste("The LM profiling file consist in a table with samples per row and each 
               lipid mediator as columns. An extra column is added called "), HTML(paste0("<b>","groups","</b>")), 
@@ -747,9 +766,6 @@ ui <- navbarPage(title = "LIMA",
              to which every lipid mediator comes from.", sep = ""),
                                        helpText("You can see the format dowloading the example file."),
                                        
-                                       
-                                       # Download button for the example file ----
-                                       downloadButton("lm_example.tsv", "Example LM file"),
                                        
                                        # Horizontal line ----
                                        tags$hr(),
@@ -915,6 +931,9 @@ ui <- navbarPage(title = "LIMA",
                                        
                                        #input -- where the sample group info column is
                                        selectInput("Group_ML2", "Select Group Column Name", "Please upload file"),
+                                       
+                                       #example MS file to download
+                                       downloadButton("DownloadML2_Example", "Download Example Input File"),
                                        
                                        # Horizontal line ----
                                        tags$hr(style = "border-top: 1px solid #000000;"),
@@ -1136,7 +1155,10 @@ ui <- navbarPage(title = "LIMA",
                                        selectInput("Group_ML2_5", "Select Group Column Name", "Please upload file"),
                                        
                                        #selecting mediators of interest 
-                                       selectInput("MetName_ML", "Select all Mediators of intrest", "Please upload file", multiple = TRUE, selectize = TRUE),
+                                       selectInput("MetName_ML", "Select all Mediators of interest", "Please upload file", multiple = TRUE, selectize = TRUE),
+                                       
+                                       #example MS file to download
+                                       downloadButton("DownloadML3_Example", "Download Example Input File"),
                                        
                                        tags$hr(),
                                        
@@ -1285,6 +1307,12 @@ ui <- navbarPage(title = "LIMA",
                                        
                                        #checkbox input
                                        checkboxInput("Choose_MetName3", "Do you want to filter the mediators included?", FALSE),
+                                       
+                                       #example MS file to download
+                                       downloadButton("DownloadML4_Example", "Download Example Input File"),
+                                       
+                                       #horizontal line
+                                       tags$hr(),
                                        
                                        #conditional panel
                                        conditionalPanel(
@@ -1616,23 +1644,84 @@ server <- function(input, output, session) {
                            header = TRUE,
                            sep = ",")
     
-    #download table 
+    #download cross reference file 
     output$DownloadCrossRef_File <- downloadHandler(filename = function(){"Example_CrossRef.csv"}, 
                                                     content = function(fname){
                                                       write.csv(MS2_CrossRef, fname, row.names = TRUE)})
     
-    #read file with crossRef their own cross reference 
+    #read file with standard curve coefficients 
     MS2_ConvCoef<-read.csv(file = "coefficients/MS2_ConvCoef.csv",
                            header = TRUE,
                            sep = ",")
     
-    #download table 
+    #download button for example file
     output$DownloadConvCoef_File <- downloadHandler(filename = function(){"Example_ConvCoef.csv"}, 
                                                     content = function(fname){
-                                                      write.csv(MS2_ConvCoef, fname, row.names = TRUE)})})
+                                                      write.csv(MS2_ConvCoef, fname, row.names = TRUE)})
+    
+    #Example file for data processing page
+    DataProc_Example<-read.csv(file = "coefficients/MS_Table.csv",
+                           header = TRUE,
+                           sep = ",")
+    
+    #download button for cexample file
+    output$DownloadDataProc_Example <- downloadHandler(filename = function(){"Example_DataProcessing.csv"}, 
+                                                    content = function(fname){
+                                                      write.csv(DataProc_Example, fname, row.names = TRUE)})
+    
+    #Example file for data formatting page
+    DataFormat_Example<-read.csv(file = "coefficients/ConcentrationTable.csv",
+                               header = TRUE,
+                               sep = ",")
+    
+    #download button for example file
+    output$DownloadDataFormat_Example <- downloadHandler(filename = function(){"Example_DataFormatting.csv"}, 
+                                                       content = function(fname){
+                                                         write.csv(DataFormat_Example, fname, row.names = TRUE)})
+    #Example file for PCA/PLSDA and Differential analysis pages
+    
+    PCADiff_Example<-read.csv(file = "coefficients/TestData.csv",
+                                 header = TRUE,
+                                 sep = ",")
+    
+    #download button for example file  
+    output$DownloadPCAPLSDA_Example <- downloadHandler(filename = function(){"Example_PCAPLSDA.csv"}, 
+                                                         content = function(fname){
+                                                           write.csv(PCADiff_Example, fname, row.names = TRUE)})
+    
+    output$DownloadDiff_Example <- downloadHandler(filename = function(){"Example_DiffAnalysis.csv"}, 
+                                                       content = function(fname){
+                                                         write.csv(PCADiff_Example, fname, row.names = TRUE)})
+    
+    #Example file for correlation analysis page
+    Corr_Example<-read.csv(file = "coefficients/Corr_Data.csv",
+                              header = TRUE,
+                              sep = ",")
+    
+    #download button for example file  
+    output$DownloadCorr_Example <- downloadHandler(filename = function(){"Example_Corr.csv"}, 
+                                                       content = function(fname){
+                                                         write.csv(Corr_Example, fname, row.names = TRUE)})
+    
+    #Example file for all the machine learning models pages 
+    
+    ML_Example<-read.csv(file = "coefficients/Train_RA.csv",
+                         header = TRUE,
+                         sep = ",")
+    
+    #download button for example file for machine learning pages   
+    output$DownloadML_Example <- output$DownloadML2_Example <-output$DownloadML3_Example <-output$DownloadML4_Example <-
+      downloadHandler(filename = function(){"Example_ML.csv"}, 
+                                                   content = function(fname){
+                                                     write.csv(ML_Example, fname, row.names = TRUE)})
+    
+    
+    })
+  
+  
   
 
-  observeEvent(input$Go_Data|input$Filt_Table, {
+  observeEvent(input$Go_Data, {
     req(input$Data_File)
     
     tryCatch(
@@ -1725,7 +1814,10 @@ server <- function(input, output, session) {
           
         }
         
-        colnames(MS_CrossRef)<-c("Component.Name", "MS_CrossRef") #ensure columns names are standized
+        colnames(MS_CrossRef)<-c("Component.Name", "MS_CrossRef") #ensure columns names are standardized
+        
+        #title for cross reference coefficient title 
+        output$CrossCoefTitle<-renderUI({req(input$Go_Data); h2("Cross Reference Coefficients", align = "center") })
         
         #output table on the coefficients info page
         output$CrossRefCoef_Table<-renderDataTable(MS_CrossRef,  extensions = c('FixedColumns',"FixedHeader"),
@@ -1912,6 +2004,7 @@ server <- function(input, output, session) {
         Samples_Conv<-merge(Samples_Coef, Conv_Coef_Table, by.x = "Component.Rename", by.y = "Mediators", all.x = TRUE)
         
         #output table on the coefficients info page
+        output$StandCurveTitle<-renderUI({req(input$Go_Data); h2("Standard Curve Coefficients", align = "center") }) #title
         output$ConvCoef_Table<-renderDataTable(Conv_Coef_Table, extensions = c('FixedColumns',"FixedHeader"),
                                                options = list(paging = TRUE, pagelength = 20, scrollY = TRUE, 
                                                               autoWidth = TRUE, fixedColumns = row.names, fixedHeader = TRUE), 
@@ -2127,7 +2220,7 @@ server <- function(input, output, session) {
           output$PerRecovery_Error<-output$NormTable_Error<-
           renderUI({HTML(paste("Error!!Please confirm if the following is correct:",
                                " - File Formats and seperator is correct and All inputs filled.", 
-                               " - File contains the follwoing columns: Sample.Name,  Sample.Index, Component.Type, Component.Name,  IS.Name, Area",
+                               " - File contains the following columns: Sample.Name,  Sample.Index, Component.Type, Component.Name,  IS.Name, Area",
                                " - If using set coefficients, confirm correct mass spectometry machine is selected",
                                " - If using cross reference Coefficient, ensure that there are 3 cross reference samples with the sample name",
                                sep = "<br/>"))})
@@ -2481,6 +2574,14 @@ server <- function(input, output, session) {
         output$VIPtext <- renderText({ 
           "Please select PLS-DA Analysis to obtain VIP Scores "
         })
+        
+        #make R2Q2 and pathways plots and table outputs blank
+        
+        output$R2Q2_Table<-renderDataTable(return())
+        output$R2Q2_Title <- renderUI(return())
+        output$R2Q2_Plot<- renderPlotly(return())
+        output$VIP_Pathway_Title <- renderUI(return())
+        output$VIP_PathwayPlot<- renderPlotly(return())
         
       }
       #script for PLS-DA analysis
@@ -3042,9 +3143,21 @@ server <- function(input, output, session) {
           mutate(Rank = 1:n(), Label = ifelse(Rank < topN, name,"")) %>% 
           ggplot(aes(x = logFC, y = -log(adj.P.Val), col=Significant, label=Label)) + geom_point(size = 3) 
         
-        VolPlot<-VolPlot + geom_text_repel(col="black", size = 5) +labs(x=" LogFC", y="Adjusted p-value" ) + 
-          theme_minimal(base_size = 16) +
-          scale_color_manual(values = c('black', "red"))
+        VolPlot<-VolPlot + geom_text_repel(col="black", size = 5) +labs(x=" LogFC", y="Adjusted p-value" ) +
+          scale_color_manual(values = c('black', "red")) +
+          theme(axis.title = element_text(size = 25),
+                axis.title.x = element_blank(),
+                axis.text.x  =  element_text(size = 15, hjust = 0.5, colour = "black"), # Put color to the labels
+                axis.text.y  = element_text(size = 15, hjust = 1, colour = "black"), # Put color to the labels
+                axis.line = element_line(colour = 'black', size = 1.0), # Color and thickness of axis
+                axis.ticks = element_line(colour = "black", size = 1.0), # Color and thickness of every axis sep. 
+                panel.background = element_rect(fill = "white"),
+                legend.title = element_text(size = 20),
+                legend.position = "top",
+                legend.key.size = unit(1.3, "cm"), 
+                legend.text  = element_text(size = 15),
+                legend.spacing.x = unit(1, "cm"),
+                axis.ticks.length = unit(0.4, "cm"))
         
         # OUTPUTS:
         
@@ -3179,8 +3292,9 @@ server <- function(input, output, session) {
         output$DiffTable_Error<- output$DiffPlot_Error<- output$Diff_UpRegPath_Plot_Error<-
           renderUI({HTML(paste("Error!!Please confirm if the following is correct:",
                                " - File Formats and seperator is correct and All inputs filled.", 
-                               " - The correct Group B and Group B is selected",
+                               " - The correct Group A and Group B is selected",
                                " - The correct sample location is selected",
+                               " - More than 7 samples are required for the test to work",
                                sep = "<br/>"))})
         #make table/plots outputs empty
         output$Diff_UpRegPath_Plot<-output$Diff_DownRegPath_Plot<-output$Diff_PValPath_Plot<-renderPlotly(return())
